@@ -19,9 +19,7 @@ class CreateCategorieMediaTable extends Migration
 
             $table->unsignedBigInteger('media_id');
             $table->foreign('media_id')->references('id')->on('media')->onDelete('cascade');
-
-            $table->primary(['categorie_id','media_id']);
-            Schema::enableForeignKeyConstraints();
+            $table->timestamps();
         });
     }
 

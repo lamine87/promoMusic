@@ -10,14 +10,7 @@ class Media extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-     'texte','url_video', 'image', 'is_online', 'categorie_id', 'media_id'
-    ];
-
-    protected $table = 'media';
-
-
-    protected $guarded = [];
+    protected $fillable = ['url_video', 'texte','title','image','pays_id','categories'];
 
     public function pays()
     {
@@ -26,17 +19,13 @@ class Media extends Model
 
     // public function user()
     // {
-    //     return $this->belongsTo(User::class);
+    //     return $this->belongsTo(User::class)->withTimestamps();
     // }
 
-    // public function categories()
-    // {
-    //     return $this->belongsToMany(Categorie::class);
-    // }
 
     public function categories()
     {
-        return $this->belongsToMany('App\Categorie','categorie_media', 'categorie_id', 'media_id');
+        return $this->belongsToMany(Categorie::class);
     }
 
 

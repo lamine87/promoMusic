@@ -14,9 +14,9 @@ class AddFieldPaysIdTableMedia extends Migration
     public function up()
     {
         Schema::table('media', function (Blueprint $table) {
-            //
             $table->unsignedBigInteger('pays_id')->nullable();
             $table->foreign('pays_id')->references('id')->on('pays')->onDelete('set null');
+            //
         });
     }
 

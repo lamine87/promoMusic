@@ -15,6 +15,8 @@ use Symfony\Component\Console\Input\Input;
 use Madcoda\Youtube\Facades\Youtube;
 use Illuminate\Support\Facades\File as FileFacade;
 use Intervention\Image\ImageManagerStatic as Image;
+use App\Models\Pays;
+use App\Models\Categorie;
 
 
 class MediaController extends Controller
@@ -83,26 +85,22 @@ class MediaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        // $user = Auth::user();
         $request->validate(
             [
                 'url_video' => 'required | string',
                 'texte' => 'required | string | max:250',
                 'title' => 'required | string | max:100',
-                'lien_facebook' => 'string',
-                'lien_instagram' => 'string',
                 'image' =>  'required|image',
-                //  'pays_id'=> 'required',
-                // 'categorie'=> 'required',
+                'pays'  => 'required',
+                'categories'=> 'required',
             ]
         );
-
-
 
         if ($request->hasFile('image')) {
             $uniqid = uniqid();
@@ -111,7 +109,7 @@ class MediaController extends Controller
             $fileName = $request->file('image')->getClientOriginalName();
 
             // Renommer le nom de l'image
-            $rename = str_replace('','_',$uniqid).'-'.date('d-m-Y-H-i').$fileName;
+            $rename = str_replace('','_',$uniqid).'-'.date('d-m-Y-H-i-').$fileName;
 
             //Telechargement de l'image
             $request->file('image')->storeAs('public/upload', $rename);
@@ -127,28 +125,29 @@ class MediaController extends Controller
             $img->save('storage/image/'.$rename);
         }
 
-        $media = new Media();
-        $media->url_video = $request->url_video;
-        // $media->lien_facebook = $request->lien_facebook;
-        // $media->lien_instagram = $request->lien_instagram;
-        $media->texte = $request->texte;
-        $media->title = $request->title;
-        $media->image = $rename;
-        $media->pays_id = $request->pays_id;
+        Media::create([
+        'url_video' => $request->url_video,
+        'texte' => $request->texte,
+        'title' => $request->title,
+        'image' => $rename,
+        'pays_id' => $request->pays
+        ])->categories()->attach($request->categories);
 
-        if ($request->categories) {
-            foreach ($request->categories as $id) {
-                $media->categories()->attach($id);
-            }
-        }
-        $media->save();
 
         return response()->json([JSON_PRETTY_PRINT,
-        'message'=>'successful!',
-        'status'=>true,
-        'media' => $media,
+            'message'=>'successful!',
+            'status'=>true,
+            'media' => [
+                'url_video' => $request->url_video,
+                'texte' => $request->texte,
+                'title' => $request->title,
+                'image' => $rename,
+                'pays_id' => $request->pays,
+                'categories'=>$request->categories,
+            ],
          ]);
     }
+
 
     /**
      * Display the specified resource.
@@ -213,11 +212,9 @@ class MediaController extends Controller
         $media->title = $request->title;
         $media->pays_id = $request->pays_id;
         $media->image = $uniqid.$fileName;
-        if ($request->categories) {
-            foreach ($request->categories as $id) {
-                $media->categories()->attach($id);
-            }
-        }
+
+        $media->categories()->sync($request->categories);
+
         $media->save();
         return response()->json([JSON_PRETTY_PRINT,
         'message'=>'successful!',
