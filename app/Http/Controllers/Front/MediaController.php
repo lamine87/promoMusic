@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\File as FileFacade;
 use Intervention\Image\ImageManagerStatic as Image;
 use App\Models\Pays;
 use App\Models\Categorie;
-
+use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
 {
@@ -28,7 +28,7 @@ class MediaController extends Controller
      */
     public function index()
     {
-        $medias = Media::where('is_online','=',1)->get();
+        $medias = Media::where('is_online','=',1)->orderBy('created_at', 'DESC')->get();
        // $medias = Media::where('is_online','=',1)->orderBy('created_at', 'DESC');
 
         foreach ($medias as $media)
@@ -112,7 +112,7 @@ class MediaController extends Controller
             $rename = str_replace('','_',$uniqid).'-'.date('d-m-Y-H-i-').$fileName;
 
             //Telechargement de l'image
-            $request->file('image')->storeAs('public/upload', $rename);
+            // $request->file('image')->storeAs('public/upload', $rename);
 
             $img = Image::make($request->file('image')->getRealPath());
 
@@ -132,7 +132,6 @@ class MediaController extends Controller
         'image' => $rename,
         'pays_id' => $request->pays
         ])->categories()->attach($request->categories);
-
 
         return response()->json([JSON_PRETTY_PRINT,
             'message'=>'successful!',
@@ -172,27 +171,36 @@ class MediaController extends Controller
      */
     public function update(Request $request, $id )
     {
-        $media = Media::find($id);
+        $media = Media::find($request->id);
         $request->validate(
-
             [
                 'url_video' => 'required | string',
                 'texte' => 'required | string | max:250',
                 'title' => 'required | string | max:100',
-                'pays_id'=> 'required',
-                'lien_facebook' => 'string',
-                'lien_instagram' => 'string',
-                'image' =>  'required|image|max:1999',
-                'categories'=> 'required'
+                'image' =>  'file',
+                'pays'  => 'required',
+                'categories'=> 'required',
             ]
-
         );
+
+            $media->url_video = $request->url_video;
+            $media->texte = $request->texte;
+            $media->title = $request->title;
+            $media->pays_id = $request->pays;
+            $media->categories()->sync($request->categories);
 
         if ($request->hasFile('image')) {
             $uniqid = uniqid();
 
             // Recuperer le nom de l'image saisi par l'utilisateur
-            $fileName = $request->file('image')->getClientOriginalName();
+            $file = $request->file('image');
+
+            $originalName = $file->getClientOriginalName();
+            // Renommer le nom de l'image
+            $fileName = str_replace('','_',$uniqid).'-'.date('d-m-Y-H-i-').$originalName;
+
+            //Telechargement de l'image
+            // $request->file('image')->storeAs('public/upload', $rename);
 
             $img = Image::make($request->file('image')->getRealPath());
 
@@ -202,36 +210,43 @@ class MediaController extends Controller
             // Imprimer l'icon sur l'image
             $img->insert(public_path('img/icon/logo_color.png'), 'bottom-right', 5, 5);
 
-            $img->save(public_path('storage/image/'.$uniqid.$fileName));
+            // Enregistrer image dans le repertoire
+            $file->move('storage/image/', $fileName);
+
+            // Supprimer l'ancienne image du repertoire
+            FileFacade::delete(public_path('storage/image/' . $media->image));
+
+            $media->image = $fileName;
         }
-
-        $media->url_video = $request->url_video;
-        $media->lien_facebook = $request->lien_facebook;
-        $media->lien_instagram = $request->lien_instagram;
-        $media->texte = $request->texte;
-        $media->title = $request->title;
-        $media->pays_id = $request->pays_id;
-        $media->image = $uniqid.$fileName;
-
-        $media->categories()->sync($request->categories);
-
         $media->save();
         return response()->json([JSON_PRETTY_PRINT,
-        'message'=>'successful!',
-        'status'=>true,
-        'media' => $media,
+            'message'=>'successful!',
+            'status'=>true,
+            'media' => $media
          ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        return Media::destroy($id);
+        $media = Media::find($id);
+        $file_name = $media->image;
+        $file_path = public_path('storage/image/'.$file_name);
+        unlink($file_path);
+        $media->delete();
+
+        return response()->json([JSON_PRETTY_PRINT,
+        'status'=>true,
+        'message'=>'supprimer avec succès!',
+        'media' => $media
+         ]);
+
     }
 
     /**
