@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -36,5 +37,27 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+    protected function redirectTo()
+    {
+        if (Auth::user()->roles->pluck('name')->contains('admin')) {
+            // Session::flash('Vous devez être connecter');
+            return response()->json([
+                'message' => 'Bienvenue Admin',
+                //    'user' =>$user
+              ]);
+
+            } else if  (Auth::user()->roles->pluck('name')->contains('admin')){
+                return response()->json([
+                    'message' => 'Bienvenue User',
+                    //  'user' =>$user
+                ]);
+
+            }else{
+                return response()->json([
+                    'message' => 'Bienvenue Super User',
+                    //  'user' =>$user
+                ]);
+            }
     }
 }

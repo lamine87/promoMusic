@@ -42,6 +42,8 @@ Route::group(['middleware','Api'=> ['auth:passport']], function () {
     // Login route
     Route::post("/login",[AuthController::class,'login']);
 
+    Route::post("/register",[AuthController::class,'register']);
+
     Route::get("/user",[AuthController::class,'users']);
     // Logout route
     Route::post('/logout',[AuthController::class,'logout']);

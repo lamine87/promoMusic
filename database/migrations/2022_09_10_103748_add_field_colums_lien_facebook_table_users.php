@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldColumsLienFacebookTableMedia extends Migration
+class AddFieldColumsLienFacebookTableUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddFieldColumsLienFacebookTableMedia extends Migration
      */
     public function up()
     {
-        Schema::table('media', function (Blueprint $table) {
-            //
-            $table->string('lien_facebook')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('lien_facebook')->default('https://www.facebook.com');
         });
     }
 
@@ -26,7 +25,7 @@ class AddFieldColumsLienFacebookTableMedia extends Migration
      */
     public function down()
     {
-        Schema::table('media', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

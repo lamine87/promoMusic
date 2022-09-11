@@ -1,23 +1,21 @@
 <?php
 
 namespace App\Http\Controllers\Front;
-use Faker\Core\File;
+use App\Models\Pays;
 use App\Models\Media;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-// use Google\Service\YouTube;
 // use Google\Service\YouTube;
 // use Dawson\Youtube\Facades\Youtube;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Symfony\Component\Console\Input\Input;
+use App\Models\Categorie;
+use Illuminate\Http\Request;
 // use Google\Service\YouTube as ServiceYouTube;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Madcoda\Youtube\Facades\Youtube;
 use Illuminate\Support\Facades\File as FileFacade;
 use Intervention\Image\ImageManagerStatic as Image;
-use App\Models\Pays;
-use App\Models\Categorie;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Session;
 
 class MediaController extends Controller
 {
@@ -61,12 +59,10 @@ class MediaController extends Controller
 
     public function videoInsert(Request $request)
     {
-
         $video = Youtube::upload($request->file('video')->getPathName(),[
 
             'title'=> $request->title,
             'description' => $request->description,
-
 
         ])->withThumbnail($request->file('image')->getPathName());
         return response()->json([JSON_PRETTY_PRINT,
@@ -90,7 +86,14 @@ class MediaController extends Controller
      */
     public function store(Request $request)
     {
-        // $user = Auth::user();
+
+        // if (auth()->guest()) {
+        //     Session::flash('Vous devez être connecter');
+        // }
+
+        $user = Auth::user();
+        // $user = User::find($request->id);
+        // var_dump($user);
         $request->validate(
             [
                 'url_video' => 'required | string',
@@ -124,14 +127,18 @@ class MediaController extends Controller
 
             $img->save('storage/image/'.$rename);
         }
+        // var_dump($user);
 
         Media::create([
         'url_video' => $request->url_video,
         'texte' => $request->texte,
         'title' => $request->title,
         'image' => $rename,
-        'pays_id' => $request->pays
+        'pays_id' => $request->pays,
+        'user_id' => auth()->id(),
+        //  $request->user()->id
         ])->categories()->attach($request->categories);
+
 
         return response()->json([JSON_PRETTY_PRINT,
             'message'=>'successful!',
@@ -143,6 +150,7 @@ class MediaController extends Controller
                 'image' => $rename,
                 'pays_id' => $request->pays,
                 'categories'=>$request->categories,
+                'user'=>$user,
             ],
          ]);
     }
@@ -158,7 +166,6 @@ class MediaController extends Controller
     {
         //
         $media = Media::find($id);
-
         return $media->toJson(JSON_PRETTY_PRINT);
     }
 
@@ -171,6 +178,7 @@ class MediaController extends Controller
      */
     public function update(Request $request, $id )
     {
+        $user = Auth::user();
         $media = Media::find($request->id);
         $request->validate(
             [
@@ -217,12 +225,15 @@ class MediaController extends Controller
             FileFacade::delete(public_path('storage/image/' . $media->image));
 
             $media->image = $fileName;
+
+            $img->save('storage/image/'.$fileName);
         }
         $media->save();
         return response()->json([JSON_PRETTY_PRINT,
             'message'=>'successful!',
             'status'=>true,
-            'media' => $media
+            'media' => $media,
+            'users'=>$user,
          ]);
     }
 
@@ -257,11 +268,11 @@ class MediaController extends Controller
      */
     public function search($title)
     {
-        // $medias = Media::all();
-        // foreach ($medias as $media)
-        // {
-        //     $media['image'] = env('BASE_URL').$media['image'];
-        // }
+        $medias = Media::all();
+        foreach ($medias as $media)
+        {
+            $media['image'] = env('BASE_URL').$media['image'];
+        }
         return Media::where('title','like','%'. $title .'%')->get();
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldColumsProfileTableUsers extends Migration
+class AddFieldColumsLienInstagramTableUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AddFieldColumsProfileTableUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
-            $table->string('avatar')->nullable();
+            $table->string('lien_instagram')->default('https://www.instagram.com');
         });
     }
 

@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\token;
+use Intervention\Image\ImageManagerStatic as Image;
+
 
 class AuthController extends Controller
 {
@@ -19,12 +21,35 @@ class AuthController extends Controller
             'name' => 'required', 'string', 'max: 100',
             'email' => 'required', 'string', 'email', 'max:255', 'unique:users',
             'password' => 'required|string|confirmed|min:8',
+            'lien_facebook' => ['string'],
+            'lien_instagram' => ['string'],
+            'avatar' => ['image'],
         ]);
+
+        if ($request->hasFile('avatar')) {
+            $uniqid = uniqid();
+
+            // Recuperer le nom de l'image saisi par l'utilisateur
+            $fileName = $request->file('avatar')->getClientOriginalName();
+
+            // Renommer le nom de l'image
+            $reName = str_replace('','_',$uniqid).'-'.date('d-m-Y-H-i-').$fileName;
+
+            $img = Image::make($request->file('avatar')->getRealPath());
+
+            //Dimensionner l'image
+            $img->resize(200, 180);
+
+            $img->save('storage/avatar/'.$reName);
+        }
 
         $user = User::create([
             'name' => $fields['name'],
             'email' => $fields['email'],
             'password' => Hash::make($fields['password']),
+            'lien_facebook' => $fields['lien_facebook'],
+            'lien_instagram' => $fields['lien_instagram'],
+            'avatar' => $reName,
         ]);
 
         //create token
@@ -35,6 +60,7 @@ class AuthController extends Controller
             'message' => 'registered successfully!',
             'user' => $user,
             'token' => $token,
+            'avatar' => $reName,
             'token_type' => 'Bearer',
         ]);
 

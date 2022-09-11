@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldColumsLienInstagramTableMedia extends Migration
+class AddFieldColumsUserIdTableMedia extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,8 @@ class AddFieldColumsLienInstagramTableMedia extends Migration
     public function up()
     {
         Schema::table('media', function (Blueprint $table) {
-            //
-            $table->string('lien_instagram')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

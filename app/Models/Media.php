@@ -10,17 +10,18 @@ class Media extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['url_video', 'texte','title','image','pays_id','categories'];
+    protected $fillable = ['texte','title','image','pays_id','user_id','categories','url_video'];
 
     public function pays()
     {
         return $this->belongsTo(Pays::class);
     }
 
-    // public function user()
-    // {
-    //     return $this->belongsTo(User::class)->withTimestamps();
-    // }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
 
     public function categories()

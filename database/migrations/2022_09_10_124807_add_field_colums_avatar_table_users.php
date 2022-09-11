@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldPaysIdTableMedia extends Migration
+class AddFieldColumsAvatarTableUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class AddFieldPaysIdTableMedia extends Migration
      */
     public function up()
     {
-        Schema::table('media', function (Blueprint $table) {
-            $table->unsignedBigInteger('pays_id')->nullable();
-            $table->foreign('pays_id')->references('id')->on('pays')->onDelete('set null');
-            //
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('avatar')->default('avatar.png');
+            // $table->string('avatar')->nullable();
         });
     }
 
@@ -27,7 +26,7 @@ class AddFieldPaysIdTableMedia extends Migration
      */
     public function down()
     {
-        Schema::table('media', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

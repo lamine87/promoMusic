@@ -23,6 +23,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'lien_facebook',
+        'lien_instagram',
+        'avatar'
     ];
 
     protected $guarded = [];
@@ -46,7 +49,6 @@ class User extends Authenticatable
     ];
     public function roles()
     {
-        //return $this->belongsToMany("App\Role")->withTimestamps();
         return $this->belongsToMany(Role::class);
     }
 
