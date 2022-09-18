@@ -10,7 +10,16 @@ class Media extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['texte','title','image','pays_id','user_id','categories','url_video'];
+
+    protected $fillable = [
+        'title',
+        'texte',
+        'image',
+        'pays_id',
+        'user_id',
+        'categories',
+        'url_video'
+    ];
 
     public function pays()
     {

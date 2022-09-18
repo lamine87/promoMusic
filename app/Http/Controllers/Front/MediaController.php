@@ -86,14 +86,8 @@ class MediaController extends Controller
      */
     public function store(Request $request)
     {
-
-        // if (auth()->guest()) {
-        //     Session::flash('Vous devez être connecter');
-        // }
-
         $user = Auth::user();
-        // $user = User::find($request->id);
-        // var_dump($user);
+
         $request->validate(
             [
                 'url_video' => 'required | string',
@@ -128,15 +122,13 @@ class MediaController extends Controller
             $img->save('storage/image/'.$rename);
         }
         // var_dump($user);
-
         Media::create([
-        'url_video' => $request->url_video,
         'texte' => $request->texte,
         'title' => $request->title,
         'image' => $rename,
         'pays_id' => $request->pays,
-        'user_id' => auth()->id(),
-        //  $request->user()->id
+        'url_video' => $request->url_video,
+        'user_id' => auth()->user()->id,
         ])->categories()->attach($request->categories);
 
 
@@ -150,7 +142,7 @@ class MediaController extends Controller
                 'image' => $rename,
                 'pays_id' => $request->pays,
                 'categories'=>$request->categories,
-                'user'=>$user,
+                'user'=>$user->id,
             ],
          ]);
     }

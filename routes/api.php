@@ -6,6 +6,8 @@ use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use Illuminate\Auth\AuthenticationException;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\Front\PageController;
@@ -14,6 +16,7 @@ use App\Http\Controllers\Gestion\ActuController;
 use App\Http\Controllers\Post\CommentController;
 use Intervention\Image\ImageManagerStatic as Image;
 use App\Http\Controllers\Gestion\GestionRedirectController;
+
 // use Youtube;
 /*
 |--------------------------------------------------------------------------
@@ -32,17 +35,19 @@ use App\Http\Controllers\Gestion\GestionRedirectController;
 // return $request->user();
 //});
 
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 // _Protected Routes_____Protected Routes_______Protected Routes_______Protected Routes_
 
-//Route::group(['middleware'=>['auth:sanctum']],function(){
+// Route::group(['middleware'=>['Api'=>'auth:sanctum']],function(){
 //}
 
 
-Route::group(['middleware','Api'=> ['auth:passport']], function () {
-    // Login route
-    Route::post("/login",[AuthController::class,'login']);
+// Route::group(['middleware','Auth'=> ['auth:sanctum']], function () {
+Route::middleware(['auth:sanctum'])->group(function(){
 
-    Route::post("/register",[AuthController::class,'register']);
+    // Auth::routes();
 
     Route::get("/user",[AuthController::class,'users']);
     // Logout route
@@ -104,12 +109,19 @@ Route::group(['middleware','Api'=> ['auth:passport']], function () {
 
     Route::post('/youtubevideo',[MediaController::class, 'videoInsert']);
 
+    Route::get('/show/user', [HomeController::class, 'showUser']);
+
 });
 
 
 // _____Public Routes_____Public Routes_______Public Routes_______Public Routes_
 
-//Route::resource('media', MediaController::class);
+// Route Authentication
+Route::post("/login",[AuthController::class, 'login']);
+
+// Route register user
+Route::post("/register",[AuthController::class,'register']);
+
  // Display route Media
 Route::get('/media',[MediaController::class, 'index']);
 

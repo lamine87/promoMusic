@@ -12,8 +12,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.7",
         "laravel/framework": "^8.65",
-        "laravel/passport": "^10.4",
-        "laravel/sanctum": "^2.12",
+        "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.5",
         "madcoda/php-youtube-api": "^1.2"
     },

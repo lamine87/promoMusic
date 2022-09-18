@@ -48,6 +48,7 @@ public function pays(Request $request){
             'pays' => $pays,
           ]);
    }
+
    public function categorie(){
 
     $categorie = Categorie::all();

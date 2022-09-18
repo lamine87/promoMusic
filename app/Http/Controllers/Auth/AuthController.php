@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\token;
+use Illuminate\Support\Facades\Cookie;
 use Intervention\Image\ImageManagerStatic as Image;
 
 
@@ -17,6 +19,7 @@ class AuthController extends Controller
     //
     public function register(Request $request)
     {
+        $user = Auth::user();
         $fields = $request->validate([
             'name' => 'required', 'string', 'max: 100',
             'email' => 'required', 'string', 'email', 'max:255', 'unique:users',
@@ -51,6 +54,8 @@ class AuthController extends Controller
             'lien_instagram' => $fields['lien_instagram'],
             'avatar' => $reName,
         ]);
+        $role = Role::select('id')->where('name','user')->first();
+        $user->roles()->attach($role);
 
         //create token
         $token = $user->createToken('myapptoken')->plainTextToken;
@@ -103,7 +108,7 @@ class AuthController extends Controller
             'token_type' => 'Bearer',
             // 'token_expires_at'=> $token->token->expires_at,
         ]);
-        //return response($response,201);
+        // return response($response,201);
 
     }
 

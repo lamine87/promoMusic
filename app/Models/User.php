@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -25,7 +26,9 @@ class User extends Authenticatable
         'password',
         'lien_facebook',
         'lien_instagram',
-        'avatar'
+        'avatar',
+        'role_user',
+
     ];
 
     protected $guarded = [];
