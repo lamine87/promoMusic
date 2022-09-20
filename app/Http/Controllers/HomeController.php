@@ -45,7 +45,7 @@ class HomeController extends Controller
         }
 
         $media = DB::table('media')
-        // ->where('is_online','=',1)
+        ->where('is_online','=',1)
         ->where('user_id', '=', $user->id)
             ->orderBy('created_at', 'desc')->get();
 

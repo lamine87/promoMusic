@@ -108,7 +108,7 @@ return [
 
     'password_timeout' => 10800,
     'api' => [
-        'driver' => 'passport',
+        'driver' => 'sanctum',
         'provider' => 'users',
         'hash' => true,
     ],

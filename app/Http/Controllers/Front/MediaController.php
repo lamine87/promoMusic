@@ -59,7 +59,8 @@ class MediaController extends Controller
 
     public function videoInsert(Request $request)
     {
-        $video = Youtube::upload($request->file('video')->getPathName(),[
+        $video = Youtube::upload($request->file('video')->getPathName(),
+        [
 
             'title'=> $request->title,
             'description' => $request->description,
@@ -86,16 +87,16 @@ class MediaController extends Controller
      */
     public function store(Request $request)
     {
-        $user = Auth::user();
+        // $user = Auth::user();
 
         $request->validate(
             [
-                'url_video' => 'required | string',
-                'texte' => 'required | string | max:250',
                 'title' => 'required | string | max:100',
-                'image' =>  'required|image',
+                'texte' => 'required | string | max:250',
                 'pays'  => 'required',
                 'categories'=> 'required',
+                'url_video' => 'required | string',
+                'image' =>  'required|image',
             ]
         );
 
@@ -123,12 +124,13 @@ class MediaController extends Controller
         }
         // var_dump($user);
         Media::create([
-        'texte' => $request->texte,
         'title' => $request->title,
-        'image' => $rename,
+        'texte' => $request->texte,
         'pays_id' => $request->pays,
+        'image' => $rename,
         'url_video' => $request->url_video,
         'user_id' => auth()->user()->id,
+
         ])->categories()->attach($request->categories);
 
 
@@ -142,7 +144,7 @@ class MediaController extends Controller
                 'image' => $rename,
                 'pays_id' => $request->pays,
                 'categories'=>$request->categories,
-                'user'=>$user->id,
+                // 'user'=>$user->id,
             ],
          ]);
     }
