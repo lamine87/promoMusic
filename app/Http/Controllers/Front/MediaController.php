@@ -27,14 +27,11 @@ class MediaController extends Controller
     public function index()
     {
         $medias = Media::where('is_online','=',1)->orderBy('created_at', 'DESC')->get();
-       // $medias = Media::where('is_online','=',1)->orderBy('created_at', 'DESC');
 
         foreach ($medias as $media)
         {
             $media['image'] = env('BASE_URL').$media['image'];
         }
-        // $media = Media::all();
-        //->orderBy('created_at', 'desc')->simplePaginate(20);
         return $medias->toJson(JSON_PRETTY_PRINT);
     }
     public function youtubeur()
