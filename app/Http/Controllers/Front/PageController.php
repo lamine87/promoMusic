@@ -26,9 +26,9 @@ class PageController extends Controller
     }
 
 
-public function pays(Request $request){
+public function mediaByContinent(Request $request){
 
-    $pays = DB::table('pays')
+    $pays = DB::table('media')
         // ->where('is_online','=', 1)
         ->where('pays_id', '=',$request->id)->get();
         return response()->json([JSON_PRETTY_PRINT,
@@ -40,10 +40,6 @@ public function pays(Request $request){
     public function continent(){
 
         $pays = Pays::all();
-
-        // = DB::table('pays')
-        //     ->where('is_online','=', 1)
-        //     ->where('pays_id', '=',$request->id)->get();
             return response()->json([JSON_PRETTY_PRINT,
             'pays' => $pays,
           ]);

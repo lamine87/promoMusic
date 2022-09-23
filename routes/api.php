@@ -134,12 +134,12 @@ Route::post('/register',[AuthController::class, 'register']);
 // Category route
 Route::get('/categorie',[PageController::class, 'categorie']);
 
-Route::get('/categorie/{id}',[PageController::class, 'voirCategorie']);
+Route::get('/categorie/media/{id}',[PageController::class, 'voirCategorie']);
 
 
 Route::get('/pays',[PageController::class, 'continent']);
 // Country route
-Route::get('/pays/{id}',[PageController::class, 'pays']);
+Route::get('/pays/media/{id}',[PageController::class, 'mediaByContinent']);
 
 // Display route Actu
 Route::get('/actualite', [ActuController::class, 'actu']);
