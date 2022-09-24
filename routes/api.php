@@ -128,23 +128,28 @@ Route::get('/media',[MediaController::class, 'index']);
  // Search route media
 Route::get('/media/search/{title}',[MediaController::class, 'search']);
 
- // Register route
+ // Create user, register route
 Route::post('/register',[AuthController::class, 'register']);
 
-// Category route
+// Get all category
 Route::get('/categorie',[PageController::class, 'categorie']);
 
+ // Filter media by category
 Route::get('/categorie/media/{id}',[PageController::class, 'voirCategorie']);
 
-
+// Get all continent
 Route::get('/pays',[PageController::class, 'continent']);
-// Country route
+
+// Filter media by continent
 Route::get('/pays/media/{id}',[PageController::class, 'mediaByContinent']);
 
-// Display route Actu
+// Get media for user
+Route::get('/tag/{id}', [PageController::class, 'tag']);
+
+// Get all Actualite, route Actu
 Route::get('/actualite', [ActuController::class, 'actu']);
 
-//Public//////////////////////// Post Comment ////////////////////////Public//
+//////////////// Post Comment ////////////////////////Public//
      // Route comment index
 Route::get('/comment/index', [CommentController::class, 'index']);
 

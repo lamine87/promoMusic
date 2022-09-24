@@ -17,31 +17,45 @@ class PageController extends Controller
 {
     //
     public function voirCategorie(Request $request){
-       $medias = DB::table('media')
+        $medias = Media::where('is_online','=',1)
             ->join('categorie_media', 'media.id', '=', 'categorie_media.media_id')
             ->join('categories', 'categories.id', '=', 'categorie_media.categorie_id')
-            ->where('is_online','=',1)
             ->where('categorie_id', '=', $request->id)
             ->orderBy('created_at', 'DESC')->get();
-
+            foreach ($medias as $media)
+            {
+                $media['image'] = env('BASE_URL').$media['image'];
+            }
             return $medias->toJson(JSON_PRETTY_PRINT);
     }
 
 
-
+// Filter media by categorie
 public function mediaByContinent(Request $request){
 
     $medias = Media::where('is_online','=',1)
     ->where('pays_id', '=',$request->id)
     ->orderBy('created_at', 'DESC')->get();
-    foreach ($medias as $media)
+     foreach ($medias as $media)
         {
             $media['image'] = env('BASE_URL').$media['image'];
         }
-        return $medias->toJson(JSON_PRETTY_PRINT);
+    return $medias->toJson(JSON_PRETTY_PRINT);
 }
 
+// Filter media for user
+public function tag(Request $request){
+    $medias = Media::where('is_online','=',1)
+    ->where('user_id', '=',$request->id)
+    ->orderBy('created_at', 'DESC')->get();
+     foreach ($medias as $media)
+        {
+            $media['image'] = env('BASE_URL').$media['image'];
+        }
+    return $medias->toJson(JSON_PRETTY_PRINT);
+}
 
+    // Get all media continent
     public function continent(){
 
         $pays = Pays::all();
@@ -50,6 +64,7 @@ public function mediaByContinent(Request $request){
           ]);
    }
 
+   // Get all media category
    public function categorie(){
 
     $categorie = Categorie::all();
