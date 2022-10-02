@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Spectacle extends Model
 {
     use HasFactory;
+
+
+    protected $fillable = [
+        'id',
+        'name',
+    ];
+
+    public function actualites()
+    {
+        return $this->belongsToMany(Actualite::class);
+    }
 }

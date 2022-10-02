@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class Cors
+class IsAdmin
 {
     /**
      * Handle an incoming request.
@@ -16,12 +16,13 @@ class Cors
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request)
+        if (!$request->user() || !$request->user()->hasRole('admin')) {
 
-        ->header("Access-Control-Allow-Origin: *")
-        ->header("Access-Control-Allow-Methods: PUT, GET, POST")
-        ->header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+            return $next($request);
+            // return redirect()->route('/admin');
+        }else {
+            abort(403);
+        }
 
     }
-
 }

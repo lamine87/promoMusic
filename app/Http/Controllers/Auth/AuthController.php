@@ -94,9 +94,8 @@ class AuthController extends Controller
         //check password
         if(!$user || !Hash::check($fields['password'],$user->password)){
             return response(['status'=>false,
-                'message'=>'Email et/ou mot de passe incorrect(s)'],401);
+                'message'=>'Email et/ou mot de passe incorrect(s)'], 401);
         }
-
         //create token
         $token = $user->createToken('myapptoken')->plainTextToken;
 

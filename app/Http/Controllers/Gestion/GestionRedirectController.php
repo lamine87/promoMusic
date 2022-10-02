@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Auth;
 
 class GestionRedirectController extends Controller
 {
-    public function loginAdmin(Request $request)
-    {
-           
-    }
+    // public function loginAdmin(Request $request)
+    // {
+
+    // }
 
 
 }

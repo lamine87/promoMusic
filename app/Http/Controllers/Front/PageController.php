@@ -15,6 +15,18 @@ use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller
 {
+
+    public function mediaByUser(Request $request)
+    {
+        $medias = Media::where('user_id', '=',$request->id)
+        ->orderBy('created_at', 'DESC')->get();
+        foreach ($medias as $media)
+        {
+            $media['image'] = env('BASE_URL').$media['image'];
+        }
+        return $medias->toJson(JSON_PRETTY_PRINT);
+    }
+
     //
     public function voirCategorie(Request $request){
         $medias = Media::where('is_online','=',1)

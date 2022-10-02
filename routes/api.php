@@ -53,7 +53,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // Logout route
     Route::post('/logout',[AuthController::class,'logout']);
 
-    // Adding route Medias
+     // Display route Media
+    Route::get('/media/by/user',[PageController::class, 'mediaByUser']);
+
+    // Adding Medias
     Route::post('/addmedia',[MediaController::class, 'store']);
 
      // Edit route Medias
@@ -69,13 +72,13 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/admin',[GestionRedirectController::class,'loginAdmin']);
 
     // Adding route Actualité
-    Route::post('/add/actu',[ActuController::class, 'store']);
+    Route::post('/add/actualite',[ActuController::class, 'store']);
 
      // Edit route Actualité
     Route::get('/edit/actu/{id}',[ActuController::class, 'show']);
 
     //  Update route Actualité
-    Route::post('/update/actu/{id}',[ActuController::class, 'update']);
+    Route::post('/update/actualite/{id}',[ActuController::class, 'update']);
 
      // Delete route Actualité
     Route::post('/destroy/actu/{id}',[ActuController::class, 'destroy']);
@@ -109,7 +112,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::post('/youtubevideo',[MediaController::class, 'videoInsert']);
 
-    Route::get('/show/user', [HomeController::class, 'showUser']);
+    // Route::get('/show/user', [HomeController::class, 'showUser']);
 
 });
 
@@ -149,6 +152,8 @@ Route::get('/tag/{id}', [PageController::class, 'tag']);
 // Get all Actualite, route Actu
 Route::get('/actualite', [ActuController::class, 'actu']);
 
+// Get all spectacles
+Route::get('/spectacles', [ActuController::class, 'getSpectacles']);
 //////////////// Post Comment ////////////////////////Public//
      // Route comment index
 Route::get('/comment/index', [CommentController::class, 'index']);

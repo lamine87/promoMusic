@@ -28,8 +28,13 @@ class User extends Authenticatable
         'lien_instagram',
         'avatar',
         'role_user',
-
     ];
+
+    public function media() {
+
+        return $this->hasMany(Media::class);
+
+    }
 
     protected $guarded = [];
     /**
@@ -64,9 +69,12 @@ class User extends Authenticatable
     }
 
 
-    public function medias() {
 
-        return $this->hasMany(Media::class);
+
+
+    public function actualites() {
+
+        return $this->hasMany(Actualite::class);
 
     }
 

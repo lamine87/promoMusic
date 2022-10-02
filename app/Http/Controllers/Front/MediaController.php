@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\File as FileFacade;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Session;
 
+
 class MediaController extends Controller
 {
     /**
@@ -34,25 +35,24 @@ class MediaController extends Controller
         }
         return $medias->toJson(JSON_PRETTY_PRINT);
     }
+
+
     public function youtubeur()
     {
-            // $video = Youtube::getVideoInfo('videos');
-            // $m = Youtube::getChannelByName('YoMusic');
-            // $channel = Youtube::getChannelById('YoMusic');
-            // $videoId = Youtube::parseVIdFromURL('videos');
-            // $playlists = Youtube::getPlaylistsByChannelId('UCsHds9fFTG0tz4p9LprUiGA');
-            $activities = Youtube::getActivitiesByChannelId('UCsHds9fFTG0tz4p9LprUiGA');
-
+        // $video = Youtube::getVideoInfo('videos');
+        // $m = Youtube::getChannelByName('YoMusic');
+        // $channel = Youtube::getChannelById('YoMusic');
+        // $videoId = Youtube::parseVIdFromURL('videos');
+        // $playlists = Youtube::getPlaylistsByChannelId('UCsHds9fFTG0tz4p9LprUiGA');
+        $activities = Youtube::getActivitiesByChannelId('UCsHds9fFTG0tz4p9LprUiGA');
         //    dd($activities);
-
         return response()->json([JSON_PRETTY_PRINT,
         'message'=>'successful!',
         'activities'=> $activities,
-
-
     ]);
 
     }
+
 
     public function videoInsert(Request $request)
     {
@@ -85,7 +85,6 @@ class MediaController extends Controller
     public function store(Request $request)
     {
         // $user = Auth::user();
-
         $request->validate(
             [
                 'title' => 'required | string | max:100',
@@ -96,7 +95,6 @@ class MediaController extends Controller
                 'image' =>  'required|image',
             ]
         );
-
         if ($request->hasFile('image')) {
             $uniqid = uniqid();
 
@@ -127,10 +125,7 @@ class MediaController extends Controller
         'image' => $rename,
         'url_video' => $request->url_video,
         'user_id' => auth()->user()->id,
-
         ])->categories()->attach($request->categories);
-
-
         return response()->json([JSON_PRETTY_PRINT,
             'message'=>'successful!',
             'status'=>true,
@@ -167,7 +162,7 @@ class MediaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id )
+    public function update(Request $request)
     {
         $user = Auth::user();
         $media = Media::find($request->id);
@@ -224,9 +219,10 @@ class MediaController extends Controller
             'message'=>'successful!',
             'status'=>true,
             'media' => $media,
-            'users'=>$user,
+            'user_id'=>$user->id,
          ]);
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -235,6 +231,8 @@ class MediaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+
     public function destroy($id)
     {
         $media = Media::find($id);
@@ -248,7 +246,6 @@ class MediaController extends Controller
         'message'=>'supprimer avec succès!',
         'media' => $media
          ]);
-
     }
 
     /**
