@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -9,7 +7,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class Media extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'title',
         'texte',
@@ -24,22 +21,17 @@ class Media extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
     public function pays()
     {
         return $this->belongsTo(Pays::class);
     }
 
-
-
-
-
     public function categories()
     {
         return $this->belongsToMany(Categorie::class);
     }
-
-
+    
     public function comments()
     {
         return $this->morphMany(Comment::class, 'commentable')

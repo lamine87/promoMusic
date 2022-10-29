@@ -28,7 +28,6 @@ class AuthController extends Controller
             'lien_instagram' => ['string'],
             'avatar' => ['image'],
         ]);
-
         if ($request->hasFile('avatar')) {
             $uniqid = uniqid();
 
@@ -45,7 +44,6 @@ class AuthController extends Controller
 
             $img->save('storage/avatar/'.$reName);
         }
-
         $user = User::create([
             'name' => $fields['name'],
             'email' => $fields['email'],
@@ -56,7 +54,6 @@ class AuthController extends Controller
         ]);
         $role = Role::select('id')->where('name','user')->first();
         $user->roles()->attach($role);
-
         //create token
         $token = $user->createToken('myapptoken')->plainTextToken;
 
@@ -70,8 +67,6 @@ class AuthController extends Controller
         ]);
 
     }
-
-
 
         public function users(){
 
@@ -87,10 +82,8 @@ class AuthController extends Controller
             'email' => 'required|string',
             'password' => 'required|string',
         ]);
-
         //check email
         $user = User::where('email',$fields['email'])->first();
-
         //check password
         if(!$user || !Hash::check($fields['password'],$user->password)){
             return response(['status'=>false,
@@ -98,7 +91,6 @@ class AuthController extends Controller
         }
         //create token
         $token = $user->createToken('myapptoken')->plainTextToken;
-
         return response()->json([JSON_PRETTY_PRINT,
             'message'=>'Login successful!',
             'status'=>true,
@@ -108,7 +100,6 @@ class AuthController extends Controller
             // 'token_expires_at'=> $token->token->expires_at,
         ]);
         // return response($response,201);
-
     }
 
     public function logout(Request $request)

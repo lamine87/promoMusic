@@ -45,10 +45,10 @@ use App\Http\Controllers\Gestion\GestionRedirectController;
 
 
 // Route::group(['middleware','Auth'=> ['auth:sanctum']], function () {
+
 Route::middleware(['auth:sanctum'])->group(function(){
 
     // Auth::routes();
-
     Route::get("/user",[AuthController::class,'users']);
     // Logout route
     Route::post('/logout',[AuthController::class,'logout']);
@@ -56,56 +56,56 @@ Route::middleware(['auth:sanctum'])->group(function(){
      // Display route Media
     Route::get('/media/by/user',[PageController::class, 'mediaByUser']);
 
-    // Adding Medias
+    // Adding Media
     Route::post('/addmedia',[MediaController::class, 'store']);
 
-     // Edit route Medias
+     // show Media
     Route::get('/edit/media/{id}',[MediaController::class, 'show']);
 
-    //  Update route media
+    //  Update media
     Route::post('/update/media/{id}',[MediaController::class, 'update']);
 
-     // Delete route Medias
+     // Delete Media
     Route::post('/destroy/media/{id}',[MediaController::class, 'destroy']);
 
     // Route Admin or SuperUser or Users
     Route::post('/admin',[GestionRedirectController::class,'loginAdmin']);
 
-    // Adding route Actualité
+    // Adding Actualité
     Route::post('/add/actualite',[ActuController::class, 'store']);
 
      // Edit route Actualité
     Route::get('/edit/actu/{id}',[ActuController::class, 'show']);
 
-    //  Update route Actualité
+    //  Update Actualité
     Route::post('/update/actualite/{id}',[ActuController::class, 'update']);
 
      // Delete route Actualité
     Route::post('/destroy/actu/{id}',[ActuController::class, 'destroy']);
 
     //////////////_Protected Route///////////// Post Comment /////////////_Protected Route//
-    // Adding route Comment
+    // Adding Comment
     Route::post('/add/comment/{media}', [CommentController::class, 'store']);
 
      // Edit route Comment
     Route::get('/edit/comment/{id}', [CommentController::class, 'show']);
 
-      //  Update route Comment
+      //  Update Comment
     Route::post('/update/comment/{id}',[CommentController::class, 'update']);
 
-    //  Delete route Comment
+    //  Delete Comment
     Route::post('/destroy/comment/{id}',[CommentController::class, 'destroy']);
 
-     // Adding route Reply
+     // Adding Reply
      Route::post('/add/reply/{comment}', [PostController::class, 'store']);
 
-     // Edit route Post
+     // Edit Post
     Route::get('/edit/post/{id}', [PostController::class, 'show']);
 
-      //  Update route Comment
+      //  Update Comment
     Route::post('/update/post/{id}',[PostController::class, 'update']);
 
-    //  Delete route post
+    //  Delete post
     Route::post('/destroy/post/{id}',[PostController::class, 'destroy']);
 
     Route::get('/youtube',[MediaController::class, 'youtubeur']);
@@ -114,6 +114,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     // Route::get('/show/user', [HomeController::class, 'showUser']);
 
+
+
 });
 
 
@@ -121,6 +123,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
 // Route Authentication
 Route::post("/login",[AuthController::class, 'login']);
+
 
 // Route register user
 Route::post("/register",[AuthController::class,'register']);

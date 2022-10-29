@@ -27,7 +27,9 @@ class PageController extends Controller
         return $medias->toJson(JSON_PRETTY_PRINT);
     }
 
-    //
+
+
+    // Get category
     public function voirCategorie(Request $request){
         $medias = Media::where('is_online','=',1)
             ->join('categorie_media', 'media.id', '=', 'categorie_media.media_id')

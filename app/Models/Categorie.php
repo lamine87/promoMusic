@@ -8,16 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Categorie extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'id', 'nom'
     ];
-
 
     public function media()
     {
         return $this->belongsToMany(Media::class);
     }
-
 
 }

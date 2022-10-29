@@ -25,9 +25,11 @@ class MediaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+     public function index()
     {
-        $medias = Media::where('is_online','=',1)->orderBy('created_at', 'DESC')->get();
+        $medias = Media::where('is_online','=',1)
+        ->orderBy('created_at', 'DESC')->get();
 
         foreach ($medias as $media)
         {
@@ -39,13 +41,9 @@ class MediaController extends Controller
 
     public function youtubeur()
     {
-        // $video = Youtube::getVideoInfo('videos');
-        // $m = Youtube::getChannelByName('YoMusic');
-        // $channel = Youtube::getChannelById('YoMusic');
-        // $videoId = Youtube::parseVIdFromURL('videos');
-        // $playlists = Youtube::getPlaylistsByChannelId('UCsHds9fFTG0tz4p9LprUiGA');
+
         $activities = Youtube::getActivitiesByChannelId('UCsHds9fFTG0tz4p9LprUiGA');
-        //    dd($activities);
+
         return response()->json([JSON_PRETTY_PRINT,
         'message'=>'successful!',
         'activities'=> $activities,
@@ -117,6 +115,7 @@ class MediaController extends Controller
 
             $img->save('storage/image/'.$rename);
         }
+
         // var_dump($user);
         Media::create([
         'title' => $request->title,
@@ -126,6 +125,7 @@ class MediaController extends Controller
         'url_video' => $request->url_video,
         'user_id' => auth()->user()->id,
         ])->categories()->attach($request->categories);
+
         return response()->json([JSON_PRETTY_PRINT,
             'message'=>'successful!',
             'status'=>true,
@@ -162,6 +162,7 @@ class MediaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function update(Request $request)
     {
         $user = Auth::user();
@@ -241,12 +242,15 @@ class MediaController extends Controller
         unlink($file_path);
         $media->delete();
 
+        dd($media);
+
         return response()->json([JSON_PRETTY_PRINT,
         'status'=>true,
         'message'=>'supprimer avec succès!',
         'media' => $media
          ]);
     }
+
 
     /**
      * Search for a name.
