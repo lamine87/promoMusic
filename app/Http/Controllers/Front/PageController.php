@@ -4,20 +4,22 @@ namespace App\Http\Controllers\Front;
 
 
 
-use App\Http\Controllers\Controller;
-use Intervention\Image\ImageManagerStatic as Image;
-use App\Models\Actualite;
-use App\Models\Categorie;
 use App\Models\Pays;
 use App\Models\Media;
+use App\Models\Actualite;
+use App\Models\Categorie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class PageController extends Controller
 {
 
     public function mediaByUser(Request $request)
     {
+         $user = Auth::user();
         $medias = Media::where('user_id', '=',$request->id)
         ->orderBy('created_at', 'DESC')->get();
         foreach ($medias as $media)
